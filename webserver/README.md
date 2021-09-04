@@ -1,0 +1,1 @@
+This folder contains a Web server that can receive messages from clients.
