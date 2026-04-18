@@ -1,10 +1,17 @@
 from fastapi import FastAPI
 from .schema import Operands
 from .logging.logger import logger
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # This runs exactly once when the server boots up 
+    logger.info("Calculator API Server started")
+    yield
+    # This runs exactly once when the server shuts down
+    logger.info("Calculator API Server shutting down")
 
-logger.info("Calculator API Server started")
+app = FastAPI(lifespan=lifespan)
 
 @app.post("/add")
 def add(operands: Operands):
