@@ -4,8 +4,10 @@
 
 To run the project run the following
 ```
-docker compose up --force-recreate
+docker compose up --build
 ```
 
-Access the swagger at the following url
-http://localhost:8000/docs
+
+Access the [loki metrics](http://localhost:3100/metrics)
+
+Access the [backend api swagger](http://localhost:8000/docs)
