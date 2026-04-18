@@ -4,7 +4,7 @@ from .logging.logger import logger
 from contextlib import asynccontextmanager
 import boto3
 import json
-
+import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,9 +17,15 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+endpoint_url = (
+    "http://ministack:4566"
+    if os.getenv("ENVIRONMENT") == "test"
+    else "http://localhost:4566"
+)
+
 lambda_client = boto3.client(
     "lambda",
-    endpoint_url="http://ministack:4566",
+    endpoint_url=endpoint_url,
     aws_access_key_id="test",
     aws_secret_access_key="test",
     region_name="us-east-1",

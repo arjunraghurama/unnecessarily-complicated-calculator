@@ -21,5 +21,14 @@ jobs:
       - name: Install the project
         run: uv sync --locked --all-extras --dev
 
+      - name: Set environment to Test
+        run: export ENVIRONMENT=test
+
+      - name: Run ministack docker container
+        run: docker compose up aws-lambda-init ministack
+
       - name: Run tests
         run: uv run pytest tests --cov=. --cov-report=html
+
+      - name: Stop ministack docker container
+        run: docker compose down aws-lambda-init ministack
