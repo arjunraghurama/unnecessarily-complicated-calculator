@@ -10,3 +10,22 @@ services:
       - "443:443"
     depends_on:
       - api_server
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+  
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - loki
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./observability/grafana/datasource:/etc/grafana/provisioning/datasources
+      - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards
+
+volumes:
+  grafana_data:
