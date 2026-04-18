@@ -8,6 +8,10 @@ docker compose up --build
 ```
 
 
-Access the [loki metrics](http://localhost:3100/metrics)
+Access [loki metrics](http://localhost:3100/metrics)
 
-Access the [backend api swagger](http://localhost:8000/docs)
+Access [backend api swagger](http://localhost:8000/docs) or `https` version [backend api swagger](https://localhost/docs) 
+
+Access [lambda functions](http://localhost:8080/resources/lambda?function=basic-math-lambda-function)
+
+Access [grafana dashboard](http://localhost:3000/grafana/dashboards) or `https` version [grafana dashboard](https://localhost/grafana/dashboards) 

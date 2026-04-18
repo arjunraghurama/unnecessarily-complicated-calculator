@@ -54,6 +54,9 @@ services:
       - "3000:3000"
     depends_on:
       - loki
+    environment:
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
     volumes:
       - grafana_data:/var/lib/grafana
       - ./observability/grafana/datasource:/etc/grafana/provisioning/datasources
