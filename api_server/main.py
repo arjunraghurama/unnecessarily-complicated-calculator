@@ -31,7 +31,7 @@ def add(operands: Operands):
     logger.info("Add operation requested")
     response = lambda_client.invoke(
         FunctionName="basic-math-lambda-function",
-        Payload=json.dumps({"operation": "add", "a": 1, "b": 2}),
+        Payload=json.dumps({"operation": "add", "a": operands.a, "b": operands.b}),
     )
     logger.info(f"Lambda response: {response}")
     result = json.loads(response["Payload"].read())
