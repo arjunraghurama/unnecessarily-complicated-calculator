@@ -1,8 +1,40 @@
 services:
+  ministack:
+    image: ministackorg/ministack
+    ports:
+      - "4566:4566"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4566/_ministack/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+  
+  ministack-ui:
+    image: davireis/stackport
+    ports:
+      - "8080:8080"
+    environment:
+      - AWS_ENDPOINT_URL=http://ministack:4566
+    depends_on:
+      - ministack
+
+  aws-lambda-init:
+    build: ./aws_lambda
+    command: [ "uv", "run", "main.py" ]
+    restart: "no"
+    depends_on:
+      - ministack
+  
   api_server:
     build: ./api_server
     ports:
       - "8000:8000"
+    depends_on:
+      - ministack
 
   nginx:
     build: ./nginx

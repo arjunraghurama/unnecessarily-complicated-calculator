@@ -2,31 +2,53 @@ from fastapi import FastAPI
 from .schema import Operands
 from .logging.logger import logger
 from contextlib import asynccontextmanager
+import boto3
+import json
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # This runs exactly once when the server boots up 
+    # This runs exactly once when the server boots up
     logger.info("Calculator API Server started")
     yield
     # This runs exactly once when the server shuts down
     logger.info("Calculator API Server shutting down")
 
+
 app = FastAPI(lifespan=lifespan)
+
+lambda_client = boto3.client(
+    "lambda",
+    endpoint_url="http://ministack:4566",
+    aws_access_key_id="test",
+    aws_secret_access_key="test",
+    region_name="us-east-1",
+)
+
 
 @app.post("/add")
 def add(operands: Operands):
     logger.info("Add operation requested")
-    return {"result": operands.a + operands.b}
+    response = lambda_client.invoke(
+        FunctionName="basic-math-lambda-function",
+        Payload=json.dumps({"operation": "add", "a": 1, "b": 2}),
+    )
+    logger.info(f"Lambda response: {response}")
+    result = json.loads(response["Payload"].read())
+    return {"result": result["body"]}
+
 
 @app.post("/subtract")
 def subtract(operands: Operands):
     logger.info("Subtract operation requested")
     return {"result": operands.a - operands.b}
 
+
 @app.post("/multiply")
 def multiply(operands: Operands):
     logger.info("Multiply operation requested")
     return {"result": operands.a * operands.b}
+
 
 @app.post("/divide")
 def divide(operands: Operands):

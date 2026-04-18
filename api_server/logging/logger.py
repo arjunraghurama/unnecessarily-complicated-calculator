@@ -4,7 +4,7 @@ import logging_loki
 handler = logging_loki.LokiHandler(
     url="http://loki:3100/loki/api/v1/push",
     tags={"app": "calculator-api-server"},
-    version="2"
+    version="2",
 )
 
 logger = logging.getLogger("calculator-api-server")
