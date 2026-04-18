@@ -53,7 +53,13 @@ def subtract(operands: Operands):
 @app.post("/multiply")
 def multiply(operands: Operands):
     logger.info("Multiply operation requested")
-    return {"result": operands.a * operands.b}
+    response = lambda_client.invoke(
+        FunctionName="basic-math-lambda-function",
+        Payload=json.dumps({"operation": "multiply", "a": operands.a, "b": operands.b}),
+    )
+    logger.info(f"Lambda response: {response}")
+    result = json.loads(response["Payload"].read())
+    return {"result": result["body"]}
 
 
 @app.post("/divide")
