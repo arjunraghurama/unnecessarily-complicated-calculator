@@ -1,12 +1,19 @@
 # unnecessarily-complicated-calculator
 
+## Architecture
+![Architecture](./assets/images/architecture.png)
+
 [![Unit Test](https://github.com/arjunraghurama/unnecessarily-complicated-calculator/actions/workflows/unit_test.yaml/badge.svg?branch=main)](https://github.com/arjunraghurama/unnecessarily-complicated-calculator/actions/workflows/unit_test.yaml)
 
-To run the project run the following
+To run the project run the following command
 ```
 docker compose up --build
 ```
 
+To stop the project run the following command
+```
+docker compose down -v
+```
 
 Access [loki metrics](http://localhost:3100/metrics)
 
