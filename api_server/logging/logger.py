@@ -8,6 +8,7 @@ handler = logging_loki.LokiHandler(
 )
 
 logger = logging.getLogger("calculator-api-server")
+logger.setLevel(logging.INFO)
 # Also attach the loki handler to uvicorn access logs
 uvicorn_access_logger = logging.getLogger("uvicorn.access")
 uvicorn_access_logger.addHandler(handler)
