@@ -25,7 +25,7 @@ jobs:
         run: export ENVIRONMENT=test
 
       - name: Run ministack docker container
-        run: docker compose up aws-lambda-init ministack
+        run: docker compose up -d aws-lambda-init ministack 
 
       - name: Run tests
         run: uv run pytest tests --cov=. --cov-report=html
