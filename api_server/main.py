@@ -23,7 +23,7 @@ if os.getenv("ENVIRONMENT") == "test":
     valkey_endpoint = "localhost"
 else:
     endpoint_url = "http://ministack:4566"
-    valkey_endpoint = "vakey"
+    valkey_endpoint = "valkey"
 
 lambda_client = boto3.client(
     "lambda",
