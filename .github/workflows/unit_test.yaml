@@ -25,10 +25,10 @@ jobs:
         run: export ENVIRONMENT=test
 
       - name: Run ministack docker container
-        run: docker compose up -d aws-lambda-init ministack 
+        run: docker compose up -d aws-lambda-init ministack valkey
 
       - name: Run tests
         run: uv run pytest tests --cov=. --cov-report=html
 
       - name: Stop ministack docker container
-        run: docker compose down aws-lambda-init ministack
+        run: docker compose down aws-lambda-init ministack valkey

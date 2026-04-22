@@ -11,5 +11,7 @@ dependencies = [
     "pytest>=9.0.3",
     "pytest-cov>=7.1.0",
     "python-logging-loki-v2>=1.1.1",
+    "redis>=7.4.0",
     "ruff>=0.15.11",
+    "valkey[libvalkey]>=6.1.1",
 ]
