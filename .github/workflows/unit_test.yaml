@@ -22,7 +22,7 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Set environment to Test
-        run: export ENVIRONMENT=test
+        run: echo "ENVIRONMENT=test" >> $GITHUB_ENV
 
       - name: Run ministack docker container
         run: docker compose up -d aws-lambda-init ministack valkey
