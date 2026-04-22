@@ -38,7 +38,7 @@ valkey_endpoint = (
     else "valkey"
 )
 
-cache_client = valkey.Valkey(host="valkey", port=6379, db=0)
+cache_client = valkey.Valkey(host=valkey_endpoint, port=6379, db=0)
 
 @app.post("/add")
 def add(operands: Operands):
