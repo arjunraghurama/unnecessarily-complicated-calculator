@@ -18,11 +18,12 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-endpoint_url = (
-    "http://localhost:4566"
-    if os.getenv("ENVIRONMENT") == "test"
-    else "http://ministack:4566"
-)
+if os.getenv("ENVIRONMENT") == "test":
+    endpoint_url = "http://localhost:4566"
+    valkey_endpoint = "localhost"
+else:
+    endpoint_url = "http://ministack:4566"
+    valkey_endpoint = "vakey"
 
 lambda_client = boto3.client(
     "lambda",
@@ -30,12 +31,6 @@ lambda_client = boto3.client(
     aws_access_key_id="test",
     aws_secret_access_key="test",
     region_name="us-east-1",
-)
-
-valkey_endpoint = (
-    "localhost"
-    if os.getenv("ENVIRONMENT") == "test"
-    else "valkey"
 )
 
 cache_client = valkey.Valkey(host=valkey_endpoint, port=6379, db=0)
@@ -113,7 +108,7 @@ def divide(operands: Operands):
     # check if result is already in cache
     if cache_client.exists(f"divide_{operands.a}_{operands.b}"):
         logger.info(f"Result found in cache for divide operation {operands.a} / {operands.b}")
-        return {"result": int(cache_client.get(f"divide_{operands.a}_{operands.b}"))}
+        return {"result": float(cache_client.get(f"divide_{operands.a}_{operands.b}"))}
 
     response = lambda_client.invoke(
         FunctionName="basic-math-lambda-function",
