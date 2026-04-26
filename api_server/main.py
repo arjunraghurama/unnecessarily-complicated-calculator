@@ -5,7 +5,11 @@ from contextlib import asynccontextmanager
 import boto3
 import json
 import os
-import valkey
+import redis
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from .tracing.tracer import get_tracer_provider
+from opentelemetry.instrumentation.redis import RedisInstrumentor
+from opentelemetry.instrumentation.botocore import BotocoreInstrumentor
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -17,6 +21,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+provider = get_tracer_provider("calculator-api-server")
+
 
 if os.getenv("ENVIRONMENT") == "test":
     endpoint_url = "http://localhost:4566"
@@ -33,7 +40,11 @@ lambda_client = boto3.client(
     region_name="us-east-1",
 )
 
-cache_client = valkey.Valkey(host=valkey_endpoint, port=6379, db=0)
+cache_client = redis.Redis(host=valkey_endpoint, port=6379, db=0)
+RedisInstrumentor().instrument(tracer_provider=provider)
+BotocoreInstrumentor().instrument(tracer_provider=provider)
+FastAPIInstrumentor.instrument_app(app, tracer_provider=provider)
+
 
 @app.post("/add")
 def add(operands: Operands):

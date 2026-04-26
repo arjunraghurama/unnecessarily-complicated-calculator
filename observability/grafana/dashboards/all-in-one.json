@@ -1,0 +1,76 @@
+{
+  "title": "Calculator Observability",
+  "uid": "calculator-observability-dashboard",
+  "tags": ["api", "loki", "tempo", "tracing"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "panels": [
+    {
+      "type": "logs",
+      "title": "Application Logs Stream",
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "builder",
+          "expr": "{app=\"calculator-api-server\"}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": true,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending"
+      }
+    },
+    {
+      "type": "table",
+      "title": "All Recent Traces",
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "refId": "B",
+          "queryType": "traceqlSearch",
+          "limit": 20,
+          "tableType": "traces",
+          "metricsQueryType": "range",
+          "serviceMapUseNativeHistograms": false,
+          "filters": [
+            {
+              "id": "service-name",
+              "isCustomValue": false,
+              "operator": "=",
+              "scope": "resource",
+              "tag": "service.name",
+              "value": [
+                "calculator-api-server"
+              ],
+              "valueType": "string"
+            }
+          ],
+          "query": "{}"
+        }
+      ]
+    }
+  ]
+}
