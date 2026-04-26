@@ -9,3 +9,11 @@ datasources:
     version: 1
     editable: true
     uid: loki
+
+  - name: Tempo
+    type: tempo
+    access: proxy
+    url: http://tempo:3200
+    version: 1
+    editable: true
+    uid: tempo

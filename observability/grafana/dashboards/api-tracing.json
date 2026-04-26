@@ -1,0 +1,47 @@
+{
+  "title": "Calculator API Tracing",
+  "uid": "api-tracing-dashboard",
+  "tags": ["tempo", "tracing"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "panels": [
+    {
+      "type": "table",
+      "title": "All Recent Traces",
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "refId": "A",
+          "queryType": "traceqlSearch",
+          "limit": 20,
+          "tableType": "traces",
+          "metricsQueryType": "range",
+          "serviceMapUseNativeHistograms": false,
+          "filters": [
+            {
+              "id": "service-name",
+              "isCustomValue": false,
+              "operator": "=",
+              "scope": "resource",
+              "tag": "service.name",
+              "value": [
+                "calculator-api-server"
+              ],
+              "valueType": "string"
+            }
+          ],
+          "query": "{}"
+        }
+      ]
+    }
+  ]
+}

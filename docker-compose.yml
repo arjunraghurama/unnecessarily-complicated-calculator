@@ -65,10 +65,22 @@ services:
     environment:
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - grafana_data:/var/lib/grafana
       - ./observability/grafana/datasource:/etc/grafana/provisioning/datasources
       - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards
+
+  tempo:
+    image: grafana/tempo:latest
+    command: "-target=all -config.file=/etc/tempo.yaml"
+    restart: always
+    volumes:
+      - ./observability/tempo/tempo.yaml:/etc/tempo.yaml:ro
+    ports:
+      - "3200:3200" # tempo
+      - "4317:4317" # Tempo OTLP GRPC
+      - "4318:4318" # Tempo OTLP HTTP
 
 volumes:
   grafana_data:
